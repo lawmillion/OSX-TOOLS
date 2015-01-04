@@ -1,0 +1,44 @@
+#!/usr/bin/expect
+
+##
+#
+#
+# example expect login.exp 127.0.0.1 root root 22
+# If you ues iterm2
+# you can new profiles and set command for example
+# other user
+# you can use by cmd!
+#
+#
+# Create by lawmil
+# Time: 2015-01-04 17:02:25
+##
+
+set ip [lindex $argv 0]
+set username [lindex $argv 1]
+set password [lindex $argv 2]
+set port [lindex $argv 3]
+if {$port == ""} {
+    set server "$username@$ip"
+} else {
+    set server "$username@$ip:$port"
+}
+
+puts "password : $password"
+spawn ssh $server
+
+expect "*yes/no*" {
+    send "yes\r"
+    exp_continue
+}
+
+set timeout 5
+
+expect "*?assword:*" {
+    send "$password\r"
+}
+
+expect "*localhost*" {
+    send "clear\r"
+}
+interact
